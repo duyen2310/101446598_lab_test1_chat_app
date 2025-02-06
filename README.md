@@ -1,3 +1,5 @@
+⚒️CHAT APP⚒️
+
 This chat application is designed to facilitate real-time communication between users. ⚒️ 💬
 
 1. User Authentication
