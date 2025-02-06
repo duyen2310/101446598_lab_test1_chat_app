@@ -4,14 +4,63 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>1-1 Chat</title>
+  <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    body {
+      background-color: #f8f9fa;
+    }
+    .chat-container {
+      max-width: 600px;
+      margin: 0 auto;
+      padding: 20px;
+      background-color: #fff;
+      border-radius: 10px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+    #messages {
+      height: 400px;
+      overflow-y: auto;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+      padding: 10px;
+      margin-bottom: 10px;
+      background-color: #f9f9f9;
+    }
+    .message {
+      margin-bottom: 10px;
+    }
+    .message strong {
+      color: #007bff;
+    }
+    .message p {
+      margin: 0;
+      padding: 8px 12px;
+      border-radius: 10px;
+      display: inline-block;
+      max-width: 80%;
+    }
+
+    .message.received p {
+      background-color: #e9ecef;
+      color: black;
+      float: left;
+    }
+    .input-group {
+      margin-top: 10px;
+    }
+  </style>
 </head>
 <body>
-  <h1>1-1 Chat</h1>
-  <div id="chat">
+  <div class="chat-container">
+    <h1 class="text-center mb-4">1-1 Chat</h1>
     <div id="messages"></div>
-    <input type="text" id="toUser" placeholder="Enter recipient username">
-    <input type="text" id="message" placeholder="Type your message">
-    <button id="send">Send</button>
+    <div class="input-group">
+      <input type="text" id="toUser" class="form-control" placeholder="Enter recipient username">
+      <input type="text" id="message" class="form-control" placeholder="Type your message">
+      <div class="input-group-append">
+        <button id="send" class="btn btn-primary">Send</button>
+      </div>
+    </div>
   </div>
 
   <script src="/socket.io/socket.io.js"></script>
@@ -20,12 +69,11 @@
 
     const username = localStorage.getItem('username');
     if (!username) {
-      window.location.href = '/'; // Redirect to login if not logged in
+      window.location.href = '/'; 
     }
 
-    socket.emit('join_room', username); // Join a room with the username
+    socket.emit('join_room', username); 
 
-    // Send private message
     document.getElementById('send').addEventListener('click', () => {
       const toUser = document.getElementById('toUser').value;
       const message = document.getElementById('message').value;
@@ -37,14 +85,20 @@
           message: message,
         });
 
+      
+
         document.getElementById('message').value = ''; // Clear input
       }
     });
 
-    // Receive private messages
     socket.on('private_message', (data) => {
       const messages = document.getElementById('messages');
-      messages.innerHTML += `<p><strong>${data.from_user}:</strong> ${data.message}</p>`;
+      messages.innerHTML += `
+        <div class="message received">
+          <p><strong>${data.from_user}:</strong> ${data.message}</p>
+        </div>
+      `;
+      messages.scrollTop = messages.scrollHeight; 
     });
   </script>
 </body>
