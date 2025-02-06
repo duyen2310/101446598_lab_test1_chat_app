@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>1-1 Chat</title>
+</head>
+<body>
+  <h1>1-1 Chat</h1>
+  <div id="chat">
+    <div id="messages"></div>
+    <input type="text" id="toUser" placeholder="Enter recipient username">
+    <input type="text" id="message" placeholder="Type your message">
+    <button id="send">Send</button>
+  </div>
+
+  <script src="/socket.io/socket.io.js"></script>
+  <script>
+    const socket = io();
+
+    const username = localStorage.getItem('username');
+    if (!username) {
+      window.location.href = '/'; // Redirect to login if not logged in
+    }
+
+    socket.emit('join_room', username); // Join a room with the username
+
+    // Send private message
+    document.getElementById('send').addEventListener('click', () => {
+      const toUser = document.getElementById('toUser').value;
+      const message = document.getElementById('message').value;
+
+      if (toUser && message) {
+        socket.emit('private_message', {
+          from_user: username,
+          to_user: toUser,
+          message: message,
+        });
+
+        document.getElementById('message').value = ''; // Clear input
+      }
+    });
+
+    // Receive private messages
+    socket.on('private_message', (data) => {
+      const messages = document.getElementById('messages');
+      messages.innerHTML += `<p><strong>${data.from_user}:</strong> ${data.message}</p>`;
+    });
+  </script>
+</body>
+</html>

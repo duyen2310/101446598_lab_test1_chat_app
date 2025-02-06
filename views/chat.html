@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard</title>
+  <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+  <div class="container mt-5">
+    <h1>Welcome to the Chat App</h1>
+    <div class="mt-4">
+      <h5>Choose a Chat Option:</h5>
+      <a href="/private-chat" class="btn btn-primary btn-block">Private Chat</a>
+      <a href="/group-chat" class="btn btn-success btn-block mt-3">Group Chat</a>
+    </div>
+    <div class="mt-4">
+      <button onclick="logout()" class="btn btn-danger btn-block">Logout</button>
+    </div>
+  </div>
+
+  <script>
+    // Check if the user is logged in
+    const username = localStorage.getItem('username');
+    if (!username) {
+      window.location.href = '/'; // Redirect to login if not logged in
+    }
+
+    // Logout functionality
+    function logout() {
+      localStorage.removeItem('username'); // Clear localStorage
+      window.location.href = '/'; // Redirect to login page
+    }
+  </script>
+</body>
+</html>
